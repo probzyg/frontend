@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="Registration Form">
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/styles.css">
+    <title>Registration Form</title>
+</head>
+    <body>
+        <div class="main">
+            <h1 class="heading1">
+            Registration form
+            </h1> 
+            <div class="container">
+                <form>
+                        <div class="inline">
+                            <div class="inputItem">
+                                <label for="fname">
+                                First name:
+                                </label>
+                                <input type="text" id="fname" name="fname" placeholder="John" required>
+                            </div>
+                            <div class="inputItem">
+                                <label for="lname">
+                                Last name:
+                                </label>
+                                <input type="text" id="lname" name="lname" placeholder="Doe" required>
+                            </div> 
+                        </div>
+                            <div class="inline">
+                                <div class="inputItem">
+                                    <label for="email">
+                                        Email:
+                                    </label>
+                                    <input type="email" id="email" name="email" placeholder="example@example.org" required>
+                                </div>
+                                <div class="inputItem">
+                                    <label for="password">
+                                        Password:
+                                    </label>
+                                    <input type="password" id="password" name="password" placeholder="12345678" required minlength="8" maxlength="15">
+                                </div>
+                            </div>   
+                            <div class="radioInput">
+                                <label>Gender</label><br>
+                                        <label>
+                                            <input type="radio" name="gender" id="gender" value="Male">
+                                            Male
+                                        </label>
+                                        <br>
+                                        <label>
+                                            <input type="radio" name="gender" id="gender" value="Female">
+                                            Female
+                                        </label>
+                            </div> 
+                            <div class="inputItem">
+                                <label for="country">
+                                    Where do you live?
+                                </label>
+                                <select name="country" id="country" required>
+                                    <option value="blank"></option>
+                                    <option value="Latvia">Latvia</option>
+                                    <option value="Not Latvia">Not Latvia :D</option>
+                                </select>
+                            </div>
+                            <div class="radioInput">
+                                <label>
+                                    <input type="checkbox" name="agreement" required>
+                                    I agree with 
+                                    <a href="/assets/terms.html" target="_blank" class="url">
+                                    terms and conditions
+                                    </a>
+                                </label>
+                            </div>
+                    <br><br>
+                    <input type="submit" value="Submit" class="button">
+                    <br><br>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

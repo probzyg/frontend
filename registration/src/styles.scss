@@ -1,0 +1,88 @@
+body {
+  background-color: black;
+  font-family: 'Inconsolata', monospace;
+  font-size: 16px;
+}
+
+.main {
+  width: 40%;
+  background-color: wheat;
+  margin: 0 auto;
+  border-radius: 20px;
+}
+
+.heading1 {
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  margin: 15px;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  row-gap: 30px;
+}
+
+.inline {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  column-gap: 30px;
+}
+
+.inputItem {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.radioInput {
+  margin-left: 10px;
+}
+
+.submit {
+  display: block;
+  margin: auto;
+}
+
+.url {
+  color: black;
+}
+
+.url:visited {
+  color: black;
+}
+
+.url:hover {
+  color: blue
+}
+
+.url:active {
+  color: blue;
+}
+
+.button {
+  display: block;
+  padding: 5px 15px;
+  font-size: 15px;
+  margin: auto;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+}
+
+.button:hover {background-color: #3e8e41}
+
+.button:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
