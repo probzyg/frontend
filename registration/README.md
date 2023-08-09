@@ -1,4 +1,4 @@
 # Registration
 Simple registration form written in HTML and CSS
 
-<img src="https://github.com/probzyg/frontend/blob/main/registration/src/assets/RegistrationForm.gif">
+<img src="https://github.com/probzyg/frontend/blob/main/registration/src/assets/RegistrationForm.gif" width="300px">
