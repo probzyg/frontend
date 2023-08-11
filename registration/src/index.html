@@ -21,7 +21,7 @@
             Registration form
             </h1> 
             <div class="container">
-                <form>
+                <form class="form">
                         <div class="inline">
                             <div class="inputItem">
                                 <label for="fname">
@@ -53,12 +53,12 @@
                             <div class="radioInput">
                                 <label>Gender</label><br>
                                         <label>
-                                            <input type="radio" name="gender" id="gender" value="Male">
+                                            <input type="radio" name="gender" id="male" value="Male">
                                             Male
                                         </label>
                                         <br>
                                         <label>
-                                            <input type="radio" name="gender" id="gender" value="Female">
+                                            <input type="radio" name="gender" id="female" value="Female">
                                             Female
                                         </label>
                             </div> 
@@ -82,9 +82,12 @@
                                 </label>
                             </div>
                     <br><br>
-                    <input type="submit" value="Submit" class="button">
+                    <input type="submit" value="Submit" class="button js-submit">
                     <br><br>
                 </form>
+            </div>
+            <div class="js-posts">
+
             </div>
         </div>
         <script src="/scripts.js"></script>
