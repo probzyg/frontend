@@ -1,0 +1,73 @@
+.main {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: stretch;
+  padding: 30px;
+  min-height: 100vh;
+  background-color: antiquewhite;
+  gap: 30px;
+}
+
+.input {
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  font-size: 0.85rem;
+  max-width: var(--max-width);
+  width: 100%;
+  background-color: rgb(149, 210, 210);
+  min-height: 100vh;
+  gap: 10px;
+}
+
+.output {
+  display: flex;
+  max-width: var(--max-width);
+  width: 100%;
+  position: sticky;
+  background-color: rgb(149, 210, 210);
+  min-height: 100vh;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 16px;
+  background-color: antiquewhite; 
+  width: 100%; 
+  color: black;
+}
+
+.all_line {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.inline {
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  gap: 10px;
+}
+
+.biggest {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 2;
+}
+
+.editable {
+  width: 100%;
+  border: 1px solid #ccc;
+  outline: gray;
+  border-radius: 2.5px;
+  background-color: rgb(69, 67, 67); /* Set a background color */
+  color: white;
+}
+
+.editable ul {
+  padding-left: 20px;
+}
