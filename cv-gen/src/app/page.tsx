@@ -1,118 +1,92 @@
-import Image from 'next/image'
 import styles from './page.module.css'
+
+function createInputField(style = '', 
+  header: string, 
+  type: string, 
+  name: string, 
+  placeholder = '', 
+  classname = '') {
+  return (
+    <div className={style ? styles[style] : ''}>
+      <h3>{header}</h3>
+      <input
+        type={type}
+        name={name}
+        placeholder={placeholder? placeholder : ''}
+        className={classname ? styles[classname] : ''}
+        required
+      />
+    </div>
+  );
+}
+
+
+function createDescriptionField(header: string, 
+  id: string 
+  ) {
+    return (
+    <div className={styles.all_line}>
+            <h3>{header}</h3>
+            <div 
+            id={id} 
+            contentEditable='true' 
+            className={styles.editable}>
+              <ul>
+                <li></li>
+              </ul>
+            </div>
+          </div>
+    )
+  }
 
 export default function Home() {
   return (
     <main className={styles.main}>
       <div className={styles.input}>
         <div className={styles.info}>
-          <div className={styles.all_line}>
-            <h3>Name</h3>
-            <input type="text" name='name' placeholder='John Doe' className={styles.one_line} required/>
-          </div>
-          <div className={styles.all_line}>
-            <h3>Objective</h3>
-            <input type="text" name='objective' placeholder='Software Developer' className={styles.one_line} required/>
+            {createInputField('all_line', 'Name', 'text', 'name', 'John Doe', 'one_line')}
+            {createInputField('all_line', 'Objective', 'text', 'objective', 'Software Developer', 'one_line')}
+          <div className={styles.inline}>
+            {createInputField('biggest', 'Email', 'email', 'email', 'example@example.org')}
+            {createInputField('', 'Phone', 'number', 'phone', 'Phone number...')}
           </div>
           <div className={styles.inline}>
-            <div className={styles.biggest}>
-              <h3>Email</h3>
-              <input type="email" name="email" placeholder='example@exapmle.org'  required/>
-            </div>
-            <div>
-              <h3>Phone</h3>
-              <input type="number" name="phone" placeholder='Phone number...' required/>
-            </div>
-          </div>
-          <div className={styles.inline}>
-            <div className={styles.biggest}>
-            <h3>Website</h3>
-              <input type="text" name="website" placeholder='Your website...' required/>
-            </div>
-            <div>
-            <h3>Location</h3>
-              <input type="text" name="location" placeholder='Your location...' required/>
-            </div>
+            {createInputField('biggest', 'Website', 'text', 'website', 'Your website...')}
+            {createInputField('', 'Location', 'text', 'location', 'Your location...')}
           </div>
         </div>
         <div className={styles.info}>
           <h1>Work experience</h1>
-          <div className={styles.all_line}>
-            <h3>Company</h3>
-            <input type="text" name='company' placeholder='Company name...' className={styles.one_line} required/>
-          </div>
+          {createInputField('all_line', 'Company', 'text', 'company', 'Company name...', 'one_line')}
           <div className={styles.inline}>
-            <div className={styles.biggest}>
-              <h3>Job title</h3>
-              <input type="job-title" name="job-title" placeholder='example@exapmle.org'  required/>
-            </div>
-            <div>
-              <h3>Date from</h3>
-              <input type="date" name="date-from" required/>
-            </div>
-            <div>
-              <h3>Date to</h3>
-              <input type="date" name="date-to" required/>
-            </div>
+            {createInputField('biggest', 'Job title', 'text', 'job-title', 'Software Developer')}
+            {createInputField('', 'Date from', 'date', 'date-job-from')}
+            {createInputField('', 'Date to', 'date', 'date-job-to')}
           </div>
-          <div className={styles.all_line}>
-            <h3>Description</h3>
-            <div id="job-description" contentEditable='true' className={styles.editable}>
-              <ul>
-                <li></li>
-              </ul>
-            </div>
-          </div>
+          {createDescriptionField('Description', 'job-description')}
         </div>
         <div className={styles.info}>
           <h1>Education</h1>
           <div className={styles.inline}>
-            <div className={styles.biggest}>
-              <h3>School</h3>
-              <input type="text" name="school-name" placeholder='School name...'  required/>
-            </div>
-            <div>
-              <h3>Date from</h3>
-              <input type="date" name="date-from" required/>
-            </div>
-            <div>
-              <h3>Date to</h3>
-              <input type="date" name="date-to" required/>
-            </div>
+            {createInputField('biggest', 'School', 'text', 'school-name', 'School name...')}
+            {createInputField('', 'Date from', 'date', 'date-school-from')}
+            {createInputField('', 'Date to', 'date', 'date-school-to')}
           </div>
           <div className={styles.inline}>
-            <div className={styles.biggest}>
-              <h3>Degree</h3>
-              <input type="text" name='degree' placeholder='High school degree' required/>
-            </div>
-            <div>
-              <h3>GPA</h3>
-              <input type='number' placeholder='3.81' />
-            </div>
+          {createInputField('biggest', 'Degree', 'text', 'degree', 'High school degree')}
+          {createInputField('', 'GPA', 'number', 'gpa', '3.81')}
           </div>
-          <div className={styles.all_line}>
-            <h3>Description</h3>
-            <div id="school-description" contentEditable='true' className={styles.editable}>
-              <ul>
-                <li></li>
-              </ul>
-            </div>
-          </div>
+          {createDescriptionField('Description', 'school-description')}
         </div>
         <div className={styles.info}>
           <h1>Skills</h1>
-          <div className={styles.all_line}>
-            <h3>Skills list</h3>
-            <div id="skills-list" contentEditable='true' className={styles.editable}>
-              <ul>
-                <li></li>
-              </ul>
-            </div>
-          </div>
+          {createDescriptionField('Skill list', 'skills-list')}
         </div>
       </div>
 
-      <div className={styles.output}></div>
+      <div className={styles.output} id='output'>
+        <iframe id="dynamic-iframe" className={styles.iframe} srcDoc=''></iframe>
+      </div>
     </main>
   )
 }
