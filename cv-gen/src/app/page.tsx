@@ -11,14 +11,14 @@ type InputData = {
   full_name: string;
   objective: string;
   email: string;
-  phone: number;
+  phone: string;
   website: string;
   location: string;
   company: string;
   job_title: string;
   date_job_from: Date;
   date_job_to: Date;
-  jobDescription: string;
+  job_description: string;
   school_name: string;
   date_school_from: Date;
   date_school_to: Date;
@@ -32,14 +32,14 @@ const [inputData, setInputData] = useState<InputData>({
   full_name: '',
   objective: '',
   email: '',
-  phone: 0,
+  phone: '',
   website: '',
   location: '',
   company: '',
   job_title: '',
   date_job_from: emptyDate,
   date_job_to: emptyDate,
-  jobDescription: '',
+  job_description: '',
   school_name: '',
   date_school_from: emptyDate,
   date_school_to: emptyDate,
@@ -48,6 +48,25 @@ const [inputData, setInputData] = useState<InputData>({
   school_description: '',
   skills_list: ''
 })
+
+const [fieldChanged, setFieldChanged] = useState({
+  email: false,
+  phone: false,
+  website: false,
+  location: false,
+  company: false,
+  job_title: false,
+  date_job_from: false,
+  date_job_to: false,
+  job_description: false,
+  school_name: false,
+  date_school_from: false,
+  date_school_to: false,
+  degree: false,
+  gpa: false,
+  school_description: false,
+  skills_list: false
+});
 
 function createInputField(style = '', 
   header: string, 
@@ -64,7 +83,10 @@ function createInputField(style = '',
         placeholder={placeholder? placeholder : ''}
         className={classname ? styles[classname] : ''}
         required
-        onChange={(e) => setInputData({ ...inputData, [name]: e.target.value })}
+        onChange={(e) => {
+          setFieldChanged({ ...fieldChanged, [name]: true });
+          setInputData({ ...inputData, [name]: e.target.value });
+        }}
       />
     </div>
   );
@@ -79,9 +101,17 @@ function createDescriptionField(header: string,
             <h3>{header}</h3>
             <div 
             id={id} 
-            contentEditable='true' 
-            className={styles.editable}
-            onInput={(e) => setInputData({ ...inputData, [id]: e.currentTarget.textContent })}
+            contentEditable='true'
+            className={`${styles.editable} ${styles.overflowAuto}`}
+            onInput={(e) => {
+              setFieldChanged({ ...fieldChanged, [id]: true });
+              const lines = e.currentTarget.innerText.split('\n').map(line => line.trim());
+              const formattedContent = lines.map(line => line ? `<li>${line}</li>` : '').join('');
+              setInputData({
+                ...inputData,
+                [id]: formattedContent
+              });
+            }}
             >
               <ul>
                 <li></li>
@@ -133,10 +163,66 @@ function createDescriptionField(header: string,
           <h1>Skills</h1>
           {createDescriptionField('Skill list', 'skills_list')}
         </div>
+        
       </div>
-
+      
       <div className={styles.output} id='output'>
-        <pre>{JSON.stringify(inputData, null, 2)}</pre>
+      <iframe
+          srcDoc={`<!DOCTYPE html>
+            <html>
+              <head>
+              <style>
+              .inline {
+                display: flex;
+                flex-direction: row;
+                padding: 10px;
+                justify-content: space-between;
+                gap: 10px;
+              }
+              .from_to {
+                display: flex;
+                flex-direction: row;
+                padding: 10px;
+                gap: 3px;
+                justify-content: flex-start;
+              }
+
+              .first_style {
+                background-color: white;
+              }
+            </style>
+              </head>
+              <body class='first_style'>
+                <h1>${inputData.full_name}</h1>
+                <p>${inputData.objective}</p>
+                <div class='inline'>
+                  ${fieldChanged.email ? `<p>Email: ${inputData.email}</p>` : ''}
+                  ${fieldChanged.phone ? `<p>Phone: ${inputData.phone}</p>` : ''}
+                  ${fieldChanged.website ? `<p>Website: ${inputData.website}</p>` : ''}
+                  ${fieldChanged.location ? `<p>Location: ${inputData.location}</p>` : ''}
+                </div>
+                <h3>Work experience</h3>
+                <div>
+                  ${fieldChanged.company ? `<h4>Company: ${inputData.company}<h4>` : ''}
+                  ${fieldChanged.job_title ? `<p>Job title: ${inputData.job_title}</p>` : ''}
+                  ${fieldChanged.date_job_from ? `<div class='from_to'><p>From ${inputData.date_job_from.toString()} to ${fieldChanged.date_job_to ? `<p>${inputData.date_job_to.toString()}` : ''}</p></div>` : ''}
+                  ${fieldChanged.job_description ? `<h4>Job Description:</h4><ul><li>${inputData.job_description}</li></ul>` : ''}
+                </div>
+                <h3>Education</h3>
+                <div>
+                  ${fieldChanged.school_name ? `<h4>School name: ${inputData.school_name}<h4>` : ''}
+                  ${fieldChanged.date_school_from ? `<div class='from_to'><p>From ${inputData.date_school_from.toString()} to ${fieldChanged.date_school_to ? `<p>${inputData.date_school_to.toString()}` : ''}</p></div>` : ''}
+                  ${fieldChanged.degree ? `<div class='from_to'><p>${inputData.degree} - ${fieldChanged.gpa ? `<p>${inputData.gpa}` : ''}</p></div>` : ''}
+                  <p>School Description: ${inputData.school_description}</p>
+                </div>
+                <h3>Skills</h3>
+                <div>
+                  <p>Skills List: ${inputData.skills_list}</p>
+                </div>
+              </body>
+            </html>`}
+          style={{ width: '100%', height: '100%' }}
+        />
       </div>
     </main>
   )
