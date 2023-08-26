@@ -102,7 +102,7 @@ function createDescriptionField(header: string,
             <div 
             id={id} 
             contentEditable='true'
-            className={`${styles.editable} ${styles.overflowAuto}`}
+            className={styles.editable}
             onInput={(e) => {
               setFieldChanged({ ...fieldChanged, [id]: true });
               const lines = e.currentTarget.innerText.split('\n').map(line => line.trim());
@@ -161,9 +161,9 @@ function createDescriptionField(header: string,
         </div>
         <div className={styles.info}>
           <h1>Skills</h1>
-          {createDescriptionField('Skill list', 'skills_list')}
+          {createDescriptionField('Skills list', 'skills_list')}
         </div>
-        
+        <pre>{JSON.stringify(inputData, null, 2)}</pre>
       </div>
       
       <div className={styles.output} id='output'>
@@ -206,18 +206,18 @@ function createDescriptionField(header: string,
                   ${fieldChanged.company ? `<h4>Company: ${inputData.company}<h4>` : ''}
                   ${fieldChanged.job_title ? `<p>Job title: ${inputData.job_title}</p>` : ''}
                   ${fieldChanged.date_job_from ? `<div class='from_to'><p>From ${inputData.date_job_from.toString()} to ${fieldChanged.date_job_to ? `<p>${inputData.date_job_to.toString()}` : ''}</p></div>` : ''}
-                  ${fieldChanged.job_description ? `<h4>Job Description:</h4><ul><li>${inputData.job_description}</li></ul>` : ''}
+                  ${fieldChanged.job_description ? `<h4>Job Description:</h4><ul>${inputData.job_description}</ul>` : ''}
                 </div>
                 <h3>Education</h3>
                 <div>
                   ${fieldChanged.school_name ? `<h4>School name: ${inputData.school_name}<h4>` : ''}
                   ${fieldChanged.date_school_from ? `<div class='from_to'><p>From ${inputData.date_school_from.toString()} to ${fieldChanged.date_school_to ? `<p>${inputData.date_school_to.toString()}` : ''}</p></div>` : ''}
                   ${fieldChanged.degree ? `<div class='from_to'><p>${inputData.degree} - ${fieldChanged.gpa ? `<p>${inputData.gpa}` : ''}</p></div>` : ''}
-                  <p>School Description: ${inputData.school_description}</p>
+                  ${fieldChanged.school_description ? `<h4>School Description:</h4><ul>${inputData.school_description}</ul>` : ''}
                 </div>
                 <h3>Skills</h3>
                 <div>
-                  <p>Skills List: ${inputData.skills_list}</p>
+                  ${fieldChanged.skills_list ? `<h4>Skills List:</h4><ul>${inputData.skills_list}</ul>` : ''}
                 </div>
               </body>
             </html>`}
