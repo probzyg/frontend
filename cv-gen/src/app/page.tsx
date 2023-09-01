@@ -1,9 +1,40 @@
 'use client'
 
 import styles from './page.module.css'
-import { useState } from 'react'
+import { useState , useRef} from 'react'
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 export default function Home() {
+
+  const iframeRef = useRef(null);
+
+  const downloadPDF = async () => {
+    const iframe = iframeRef.current as any;
+    if (!iframe) return;
+  
+    const iframeDocument = iframe.contentDocument || iframe.contentWindow?.document;
+  
+    if (!iframeDocument) {
+      console.error("Failed to access iframe's content document");
+      return;
+    }
+
+    const scale = 3;
+  const canvas = await html2canvas(iframeDocument.body, {
+    scale: scale,
+    useCORS: true
+  })
+    const pdf = new jsPDF();
+    const imgData = canvas.toDataURL('image/jpeg', 1.0);
+    const imgProps = pdf.getImageProperties(imgData);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    pdf.save('cv.pdf');
+  };
+  
+  
 
   const emptyDate = new Date(0);
 
@@ -164,36 +195,64 @@ function createDescriptionField(header: string,
             <h1>Skills</h1>
             {createDescriptionField('Skills list', 'skills_list')}
           </div>
-          <pre>{JSON.stringify(inputData, null, 2)}</pre>
+          <div className={styles.info}>
+            <h1>Languages</h1>
+            {createInputField('all_line', 'Language', 'text', 'language', 'English')}
+            <div className={styles.inline}>
+              {createInputField('', 'Reading', 'text', 'reading', 'B1')}
+              {createInputField('', 'Listening', 'text', 'listening', 'B1')}
+              {createInputField('', 'Writing', 'text', 'writing', 'B1')}
+              <button>Add new Language</button>
+            </div>
+          </div>
         </div>
         
         <div className={styles.output} id='output'>
         <iframe
+            ref={iframeRef}
             srcDoc={`<!DOCTYPE html>
               <html>
                 <head>
                 <style>
                 .inline {
                   display: flex;
-                  flex-direction: row;
-                  padding: 10px;
+                  flex-direction: row;                  
                   justify-content: space-between;
-                  gap: 10px;
+                  gap: 5px;
                 }
                 .from_to {
                   display: flex;
                   flex-direction: row;
-                  padding: 10px;
                   gap: 3px;
                   justify-content: flex-start;
                 }
 
                 .first_style {
                   background-color: white;
+                  display: flex;
+                  flex-direction: column;
+                  gap: 5px;
+                  margin: 30px;
+                }
+                .colored_box {
+                  background-color: rgb(149, 188, 210);
+                  height: 10px;
+                  width: 100%;
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                }
+                h1, h3, h4, ul, p {
+                  margin: 0px;
+                }
+                h3 {
+                  background-color: rgb(149, 188, 210);
+                  border-radius: 3px;
                 }
               </style>
                 </head>
                 <body class='first_style'>
+                <div class='colored_box'></div>
                   <h1>${inputData.full_name}</h1>
                   <p>${inputData.objective}</p>
                   <div class='inline'>
@@ -204,26 +263,31 @@ function createDescriptionField(header: string,
                   </div>
                   <h3>Work experience</h3>
                   <div>
-                    ${fieldChanged.company ? `<h4>Company: ${inputData.company}<h4>` : ''}
-                    ${fieldChanged.job_title ? `<p>Job title: ${inputData.job_title}</p>` : ''}
-                    ${fieldChanged.date_job_from ? `<div class='from_to'><p>From ${inputData.date_job_from.toString()} to ${fieldChanged.date_job_to ? `<p>${inputData.date_job_to.toString()}` : ''}</p></div>` : ''}
-                    ${fieldChanged.job_description ? `<h4>Job Description:</h4><ul>${inputData.job_description}</ul>` : ''}
+                    ${fieldChanged.company ? `<h4>${inputData.company}</h4>` : ''}
+                    <div class='inline'>
+                      ${fieldChanged.job_title ? `<p>${inputData.job_title}</p>` : ''}
+                      ${fieldChanged.date_job_from ? `<div class='from_to'><p>From ${inputData.date_job_from.toString()} till ${fieldChanged.date_job_to ? `<p>${inputData.date_job_to.toString()}` : 'now'}</p></div>` : ''}
+                    </div>
+                    ${fieldChanged.job_description ? `<ul>${inputData.job_description}</ul>` : ''}
                   </div>
                   <h3>Education</h3>
                   <div>
-                    ${fieldChanged.school_name ? `<h4>School name: ${inputData.school_name}<h4>` : ''}
-                    ${fieldChanged.date_school_from ? `<div class='from_to'><p>From ${inputData.date_school_from.toString()} to ${fieldChanged.date_school_to ? `<p>${inputData.date_school_to.toString()}` : ''}</p></div>` : ''}
+                    ${fieldChanged.school_name ? `<h4>${inputData.school_name}</h4>` : ''}
+                    <div class='inline'>
                     ${fieldChanged.degree ? `<div class='from_to'><p>${inputData.degree} - ${fieldChanged.gpa ? `<p>${inputData.gpa}` : ''}</p></div>` : ''}
-                    ${fieldChanged.school_description ? `<h4>School Description:</h4><ul>${inputData.school_description}</ul>` : ''}
+                      ${fieldChanged.date_school_from ? `<div class='from_to'><p>From ${inputData.date_school_from.toString()} till ${fieldChanged.date_school_to ? `<p>${inputData.date_school_to.toString()}` : 'now'}</p></div>` : ''}
+                    </div>
+                    ${fieldChanged.school_description ? `<ul>${inputData.school_description}</ul>` : ''}
                   </div>
                   <h3>Skills</h3>
                   <div>
-                    ${fieldChanged.skills_list ? `<h4>Skills List:</h4><ul>${inputData.skills_list}</ul>` : ''}
+                    ${fieldChanged.skills_list ? `<ul>${inputData.skills_list}</ul>` : ''}
                   </div>
                 </body>
               </html>`}
             style={{ width: '100%', height: '100%' }}
           />
+          <button onClick={downloadPDF}>Download PDF</button>
         </div>
       </main>
     </body>

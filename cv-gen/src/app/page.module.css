@@ -24,7 +24,7 @@
   padding: 30px;
   font-size: 0.85rem;
   width: 50%;
-  background-color: rgb(149, 210, 210);
+  background-color: rgb(149, 188, 210);
   max-height: calc(100vh - 30px);
   gap: 10px;
   overflow-y: auto;
@@ -34,6 +34,7 @@
 .output {
   flex: 1;
   display: flex;
+  flex-direction: column;
   max-width: var(--max-width);
   width: 100%;
   position: sticky;
