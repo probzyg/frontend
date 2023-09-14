@@ -4,12 +4,14 @@ import styles from './page.module.css'
 import { useState , useRef} from 'react'
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import createInputField from './inputField';
+import createDescriptionField from './descriptionField';
 
 export default function Home() {
 
-  const iframeRef = useRef(null);
+const iframeRef = useRef(null);
 
-  const downloadPDF = async () => {
+const downloadPDF = async () => {
     const iframe = iframeRef.current as any;
     if (!iframe) return;
   
@@ -34,9 +36,7 @@ export default function Home() {
     pdf.save('cv.pdf');
   };
   
-  
-
-  const emptyDate = new Date(0);
+const emptyDate = new Date(0);
 
 type InputData = {
   full_name: string;
@@ -99,109 +99,56 @@ const [fieldChanged, setFieldChanged] = useState({
   skills_list: false
 });
 
-function createInputField(style = '', 
-  header: string, 
-  type: string, 
-  name: string, 
-  placeholder = '', 
-  classname = '') {
-  return (
-    <div className={style ? styles[style] : ''}>
-      <h3>{header}</h3>
-      <input
-        type={type}
-        name={name}
-        placeholder={placeholder? placeholder : ''}
-        className={classname ? styles[classname] : ''}
-        required
-        onChange={(e) => {
-          setFieldChanged({ ...fieldChanged, [name]: true });
-          setInputData({ ...inputData, [name]: e.target.value });
-        }}
-      />
-    </div>
-  );
-}
-
-
-function createDescriptionField(header: string, 
-  id: string 
-  ) {
-    return (
-    <div className={styles.all_line}>
-            <h3>{header}</h3>
-            <div 
-            id={id} 
-            contentEditable='true'
-            className={styles.editable}
-            onInput={(e) => {
-              setFieldChanged({ ...fieldChanged, [id]: true });
-              const lines = e.currentTarget.innerText.split('\n').map(line => line.trim());
-              const formattedContent = lines.map(line => line ? `<li>${line}</li>` : '').join('');
-              setInputData({
-                ...inputData,
-                [id]: formattedContent
-              });
-            }}
-            >
-              <ul>
-                <li></li>
-              </ul>
-            </div>
-          </div>
-    )
-  }
-
   return (
     <body className={styles.body}>
       <main className={styles.main}>
         <div className={styles.input}>
           <div className={styles.info}>
-              {createInputField('all_line', 'Name', 'text', 'full_name', 'John Doe', 'one_line')}
-              {createInputField('all_line', 'Objective', 'text', 'objective', 'Software Developer', 'one_line')}
+              {createInputField('all_line', 'Name', 'text', 'full_name', 'John Doe', 'one_line', setFieldChanged, setInputData)}
+              {createInputField('all_line', 'Objective', 'text', 'objective', 'Software Developer', 'one_line', setFieldChanged, setInputData)}
             <div className={styles.inline}>
-              {createInputField('biggest', 'Email', 'email', 'email', 'example@example.org')}
-              {createInputField('', 'Phone', 'number', 'phone', 'Phone number...')}
+              {createInputField('biggest', 'Email', 'email', 'email', 'example@example.org', '', setFieldChanged, setInputData)}
+              {createInputField('', 'Phone', 'number', 'phone', 'Phone number...', '', setFieldChanged, setInputData)}
             </div>
             <div className={styles.inline}>
-              {createInputField('biggest', 'Website', 'text', 'website', 'Your website...')}
-              {createInputField('', 'Location', 'text', 'location', 'Your location...')}
+              {createInputField('biggest', 'Website', 'text', 'website', 'Your website...', '', setFieldChanged, setInputData)}
+              {createInputField('', 'Location', 'text', 'location', 'Your location...', '', setFieldChanged, setInputData)}
             </div>
           </div>
           <div className={styles.info}>
             <h1>Work experience</h1>
-            {createInputField('all_line', 'Company', 'text', 'company', 'Company name...', 'one_line')}
+            {createInputField('all_line', 'Company', 'text', 'company', 'Company name...', 'one_line', setFieldChanged, setInputData)}
             <div className={styles.inline}>
-              {createInputField('biggest', 'Job title', 'text', 'job_title', 'Software Developer')}
-              {createInputField('', 'Date from', 'date', 'date_job_from')}
-              {createInputField('', 'Date to', 'date', 'date_job_to')}
+              {createInputField('biggest', 'Job title', 'text', 'job_title', 'Software Developer', '', setFieldChanged, setInputData)}
+              {createInputField('', 'Date from', 'date', 'date_job_from', '', '', setFieldChanged, setInputData)}
+              {createInputField('', 'Date to', 'date', 'date_job_to', '', '', setFieldChanged, setInputData)}
             </div>
-            {createDescriptionField('Description', 'job_description')}
+            {createDescriptionField('Description', 'job_description', setFieldChanged, setInputData)}
           </div>
           <div className={styles.info}>
             <h1>Education</h1>
             <div className={styles.inline}>
-              {createInputField('biggest', 'School', 'text', 'school_name', 'School name...')}
-              {createInputField('', 'Date from', 'date', 'date_school_from')}
-              {createInputField('', 'Date to', 'date', 'date_school_to')}
+              {createInputField('biggest', 'School', 'text', 'school_name', 'School name...', '', setFieldChanged, setInputData)}
+              {createInputField('', 'Date from', 'date', 'date_school_from', '', '', setFieldChanged, setInputData)}
+              {createInputField('', 'Date to', 'date', 'date_school_to', '', '', setFieldChanged, setInputData)}
             </div>
             <div className={styles.inline}>
-            {createInputField('biggest', 'Degree', 'text', 'degree', 'High school degree')}
-            {createInputField('', 'GPA', 'number', 'gpa', '3.81')}
+            {createInputField('biggest', 'Degree', 'text', 'degree', 'High school degree', '', setFieldChanged, setInputData)}
+            {createInputField('', 'GPA', 'number', 'gpa', '3.81', '', setFieldChanged, setInputData)}
             </div>
-            {createDescriptionField('Description', 'school_description')}
+            {createDescriptionField('Description', 'school_description', setFieldChanged, setInputData)}
           </div>
           <div className={styles.info}>
             <h1>Skills</h1>
-            {createDescriptionField('Skills list', 'skills_list')}
+            {createDescriptionField('Skills list', 'skills_list', setFieldChanged, setInputData)}
           </div>
           <div className={styles.info}>
             <h1>Languages</h1>
-            {createInputField('all_line', 'Language', 'text', 'language', 'English')}
+            {createInputField('all_line', 'Language', 'text', 'language', 'English', '', setFieldChanged, setInputData)}
             <div className={styles.inline}>
-              {createInputField('', 'Reading', 'text', 'reading', 'B1')}
-              {createInputField('', 'Listening', 'text', 'listening', 'B1')}
-              {createInputField('', 'Writing', 'text', 'writing', 'B1')}
+              {createInputField('', 'Reading', 'text', 'reading', 'B1', '', setFieldChanged, setInputData)}
+              {createInputField('', 'Listening', 'text', 'listening', 'B1', '', setFieldChanged, setInputData)}
+              {createInputField('', 'Writing', 'text', 'writing', 'B1', '', setFieldChanged, setInputData)}
               <button>Add new Language</button>
             </div>
           </div>
