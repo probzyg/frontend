@@ -2,39 +2,13 @@
 
 import styles from './page.module.css'
 import { useState , useRef} from 'react'
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
 import createInputField from './inputField';
 import createDescriptionField from './descriptionField';
+import downloadPDF from './downloadPDF';
 
 export default function Home() {
 
 const iframeRef = useRef(null);
-
-const downloadPDF = async () => {
-    const iframe = iframeRef.current as any;
-    if (!iframe) return;
-  
-    const iframeDocument = iframe.contentDocument || iframe.contentWindow?.document;
-  
-    if (!iframeDocument) {
-      console.error("Failed to access iframe's content document");
-      return;
-    }
-
-    const scale = 3;
-  const canvas = await html2canvas(iframeDocument.body, {
-    scale: scale,
-    useCORS: true
-  })
-    const pdf = new jsPDF();
-    const imgData = canvas.toDataURL('image/jpeg', 1.0);
-    const imgProps = pdf.getImageProperties(imgData);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-    pdf.save('cv.pdf');
-  };
   
 const emptyDate = new Date(0);
 
@@ -234,7 +208,7 @@ const [fieldChanged, setFieldChanged] = useState({
               </html>`}
             style={{ width: '100%', height: '100%' }}
           />
-          <button onClick={downloadPDF}>Download PDF</button>
+          <button onClick={() => downloadPDF(iframeRef)}>Download PDF</button>
         </div>
       </main>
     </body>
