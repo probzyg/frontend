@@ -1,10 +1,10 @@
 import React from 'react';
 import styles from './page.module.css'
+import { InputData, useFormData } from './formData';
 
 function createDescriptionField(header: string, 
-    id: string, 
-    fieldChanged: any, 
-    inputData: any) {
+    id: string) {
+      const { inputData, setInputData, fieldChanged, setFieldChanged } = useFormData();
   return (
     <div className={styles.all_line}>
       <h3>{header}</h3>
@@ -13,10 +13,10 @@ function createDescriptionField(header: string,
         contentEditable='true'
         className={styles.editable}
         onInput={(e) => {
-          fieldChanged({ ...fieldChanged, [id]: true });
+          setFieldChanged({ ...fieldChanged, [id]: true });
           const lines = e.currentTarget.innerText.split('\n').map(line => line.trim());
           const formattedContent = lines.map(line => line ? `<li>${line}</li>` : '').join('');
-          inputData({
+          setInputData({
             ...inputData,
             [id]: formattedContent
           });
