@@ -1,261 +1,301 @@
-'use client'
+  'use client'
 
-import styles from './page.module.css'
-import { useState , useRef} from 'react'
-import downloadPDF from './downloadPDF';
-import { v4 as uuidv4 } from 'uuid';
+  import styles from './page.module.css'
+  import { useState , useRef} from 'react'
+  import downloadPDF from './downloadPDF';
+  import { v4 as uuidv4 } from 'uuid';
 
-export default function Home() {
+  export default function Home() {
 
-const iframeRef = useRef(null);
-  
-const emptyDate = new Date(0);
+  const iframeRef = useRef(null);
 
-type WorkExperience = {
-  id: string,
-  company: string;
-  job_title: string;
-  date_job_from: string;
-  date_job_to: string;
-  job_description: string;
-}
+  type WorkExperience = {
+    id: string,
+    company: string;
+    job_title: string;
+    date_job_from: string;
+    date_job_to: string;
+    job_description: string;
+  }
 
-const [workExperience, setWorkExperience] = useState<WorkExperience[]>([
-  {
-    id: uuidv4(),
-    company: '',
-  job_title: '',
-  date_job_from: '',
-  date_job_to: '',
-  job_description: ''
-}
-]);
-
-const handleWorkExperienceChange = (index: number, event: React.ChangeEvent<HTMLInputElement>, name: string) => {
-  const updatedFields = [...workExperience];
-  updatedFields[index][event.target.name as keyof WorkExperience] = event.target.value;
-  setWorkExperience(updatedFields);
-  setInputData({ ...inputData, workExperience: updatedFields });
-  setFieldChanged({ ...fieldChanged, [name]: true });
-}
-
-const addWorkExperience = () => {
-  const newField = {
-    id: uuidv4(),
-    company: '',
+  const [workExperience, setWorkExperience] = useState<WorkExperience[]>([
+    {
+      id: uuidv4(),
+      company: '',
     job_title: '',
     date_job_from: '',
     date_job_to: '',
     job_description: ''
   }
-  setWorkExperience([...workExperience, newField]);
-  setInputData({ ...inputData, workExperience: [...workExperience, newField] });
-};
+  ]);
 
-const removeWorkExperience = (id: string) => {
-  const updatedWorkExperience = workExperience.filter((experience) => experience.id !== id);
-  setWorkExperience(updatedWorkExperience);
-  setInputData({ ...inputData, workExperience: updatedWorkExperience });
-};
-
-type Education= {
-  id: string,
-  school_name: string;
-  date_school_from: string;
-  date_school_to: string;
-  degree: string;
-  gpa: string;
-  school_description: string;
-}
-
-const [education, setEducation] = useState<Education[]>([
-  {
-    id: uuidv4(),
-    school_name: '',
-    date_school_from: '',
-    date_school_to: '',
-    degree: '',
-    gpa: '',
-    school_description: ''
+  const handleWorkExperienceChange = (index: number, event: React.ChangeEvent<HTMLInputElement>, name: string) => {
+    const updatedFields = [...workExperience];
+    updatedFields[index][event.target.name as keyof WorkExperience] = event.target.value;
+    setWorkExperience(updatedFields);
+    setInputData({ ...inputData, workExperience: updatedFields });
+    setFieldChanged({ ...fieldChanged, [name]: true });
   }
-]);
 
-const handleEducationChange = (index: number, event: React.ChangeEvent<HTMLInputElement>, name: string) => {
-  const updatedEducation = [...education];
-  updatedEducation[index][event.target.name as keyof Education] = event.target.value;
-  setEducation(updatedEducation);
-  setInputData({ ...inputData, education: updatedEducation });
-  setFieldChanged({ ...fieldChanged, [name]: true });
-}
-
-const addEducation = () => {
-  const newField = {
-    id: uuidv4(),
-    school_name: '',
-    date_school_from: '',
-    date_school_to: '',
-    degree: '',
-    gpa: '',
-    school_description: ''
-  }
-  setEducation([...education, newField]);
-  setInputData({ ...inputData, education: [...education, newField] });
-};
-
-const removeEducation = (id: string) => {
-  const updatedEducation = education.filter((education) => education.id !== id);
-  setEducation(updatedEducation);
-  setInputData({ ...inputData, education: updatedEducation });
-};
-
-type Languages = {
-  language: string;
-  rating: string;
-}
-
-
-const [languages, setLanguages] = useState<Languages[]>([
-  {language: '',
-    rating: ''}
-]);
-
-const handleLanguagesChange = (index: number, event: React.ChangeEvent<HTMLInputElement>, name: string) => {
-  const updatedLanguages = [...languages];
-  updatedLanguages[index][event.target.name as keyof Languages] = event.target.value;
-  setLanguages(updatedLanguages);
-  setInputData({ ...inputData, languages: updatedLanguages });
-  setFieldChanged({ ...fieldChanged, [name]: true });
-}
-
-const addLanguage = () => {
+  const addWorkExperience = () => {
     const newField = {
-      language: '',
-      rating: ''
-    };
-    setLanguages([...languages, newField]);
-    setInputData({ ...inputData, languages: [...languages, newField] });
-};
+      id: uuidv4(),
+      company: '',
+      job_title: '',
+      date_job_from: '',
+      date_job_to: '',
+      job_description: ''
+    }
+    setWorkExperience([...workExperience, newField]);
+    setInputData({ ...inputData, workExperience: [...workExperience, newField] });
+  };
 
-const removeLanguage = (index: any) => {
-  const updatedLanguages = [...languages];
-  updatedLanguages.splice(index, 1);
-  setLanguages(updatedLanguages);
-  setInputData({...inputData, languages: updatedLanguages})
-};
+  const removeWorkExperience = (id: string) => {
+    const updatedWorkExperience = workExperience.filter((experience) => experience.id !== id);
+    setWorkExperience(updatedWorkExperience);
+    setInputData({ ...inputData, workExperience: updatedWorkExperience });
+  };
 
-type InputData = {
-  full_name: string;
-  objective: string;
-  email: string;
-  phone: string;
-  website: string;
-  location: string;
-  workExperience: WorkExperience[],
-  education: Education[],
-  skills_list: string;
-  languages: Languages[]
-}; 
+  type Education= {
+    id: string,
+    school_name: string;
+    date_school_from: string;
+    date_school_to: string;
+    degree: string;
+    gpa: string;
+    school_description: string;
+  }
 
-const [inputData, setInputData] = useState<InputData>({
-  full_name: '',
-  objective: '',
-  email: '',
-  phone: '',
-  website: '',
-  location: '',
-  workExperience: [],
-  education: [],
-  skills_list: '',
-  languages: []
-})
+  const [education, setEducation] = useState<Education[]>([
+    {
+      id: uuidv4(),
+      school_name: '',
+      date_school_from: '',
+      date_school_to: '',
+      degree: '',
+      gpa: '',
+      school_description: ''
+    }
+  ]);
 
-const [fieldChanged, setFieldChanged] = useState({
-  email: false,
-  phone: false,
-  website: false,
-  location: false,
-  company: false,
-  job_title: false,
-  date_job_from: false,
-  date_job_to: false,
-  job_description: false,
-  school_name: false,
-  date_school_from: false,
-  date_school_to: false,
-  degree: false,
-  gpa: false,
-  school_description: false,
-  skills_list: false,
-  language: false,
-  rating: false
-});
+  const handleEducationChange = (index: number, event: React.ChangeEvent<HTMLInputElement>, name: string) => {
+    const updatedEducation = [...education];
+    updatedEducation[index][event.target.name as keyof Education] = event.target.value;
+    setEducation(updatedEducation);
+    setInputData({ ...inputData, education: updatedEducation });
+    setFieldChanged({ ...fieldChanged, [name]: true });
+  }
 
-function createInputField(style = '', 
-  header: string, 
-  type: string, 
-  name: string, 
-  placeholder = '', 
-  classname = '') {
-  return (
-    <div className={style ? styles[style] : ''}>
-      <h3>{header}</h3>
-      <input
-        type={type}
-        name={name}
-        placeholder={placeholder? placeholder : ''}
-        className={classname ? styles[classname] : ''}
-        required
-        onChange={(e) => {
-          setFieldChanged({ ...fieldChanged, [name]: true });
-          setInputData({ ...inputData, [name]: e.target.value });
-        }}
-      />
-    </div>
-  );
-}
+  const addEducation = () => {
+    const newField = {
+      id: uuidv4(),
+      school_name: '',
+      date_school_from: '',
+      date_school_to: '',
+      degree: '',
+      gpa: '',
+      school_description: ''
+    }
+    setEducation([...education, newField]);
+    setInputData({ ...inputData, education: [...education, newField] });
+  };
 
-function createDescriptionField(header: string, 
-  id: string 
+  const removeEducation = (id: string) => {
+    const updatedEducation = education.filter((education) => education.id !== id);
+    setEducation(updatedEducation);
+    setInputData({ ...inputData, education: updatedEducation });
+  };
+
+  type Languages = {
+    language: string;
+    rating: string;
+  }
+
+
+  const [languages, setLanguages] = useState<Languages[]>([
+    {language: '',
+      rating: ''}
+  ]);
+
+  const handleLanguagesChange = (index: number, event: React.ChangeEvent<HTMLInputElement>, name: string) => {
+    const updatedLanguages = [...languages];
+    updatedLanguages[index][event.target.name as keyof Languages] = event.target.value;
+    setLanguages(updatedLanguages);
+    setInputData({ ...inputData, languages: updatedLanguages });
+    setFieldChanged({ ...fieldChanged, [name]: true });
+  }
+
+  const addLanguage = () => {
+      const newField = {
+        language: '',
+        rating: ''
+      };
+      setLanguages([...languages, newField]);
+      setInputData({ ...inputData, languages: [...languages, newField] });
+  };
+
+  const removeLanguage = (index: any) => {
+    const updatedLanguages = [...languages];
+    updatedLanguages.splice(index, 1);
+    setLanguages(updatedLanguages);
+    setInputData({...inputData, languages: updatedLanguages})
+  };
+
+  type InputData = {
+    full_name: string;
+    objective: string;
+    email: string;
+    phone: string;
+    website: string;
+    location: string;
+    workExperience: WorkExperience[],
+    education: Education[],
+    skills_list: string;
+    languages: Languages[]
+  }; 
+
+  const [inputData, setInputData] = useState<InputData>({
+    full_name: '',
+    objective: '',
+    email: '',
+    phone: '',
+    website: '',
+    location: '',
+    workExperience: [],
+    education: [],
+    skills_list: '',
+    languages: []
+  })
+
+  const [fieldChanged, setFieldChanged] = useState({
+    email: false,
+    phone: false,
+    website: false,
+    location: false,
+    company: false,
+    job_title: false,
+    date_job_from: false,
+    date_job_to: false,
+    job_description: false,
+    school_name: false,
+    date_school_from: false,
+    date_school_to: false,
+    degree: false,
+    gpa: false,
+    school_description: false,
+    skills_list: false,
+    language: false,
+    rating: false
+  });
+
+  function createInputField<T>(
+    style = '',
+    header: string,
+    type = '',
+    name: string,
+    placeholder = '',
+    classname = '',
+    index: undefined | number,
+    value: string | undefined,
+    changeHandler: ((index: number, event: React.ChangeEvent<HTMLInputElement>, name: string) => void) | undefined
   ) {
     return (
-    <div className={styles.all_line}>
-            <h3>{header}</h3>
-            <div 
-              id={id} 
-              contentEditable='true'
-              className={styles.editable}
-              onInput={(e) => {
-                setFieldChanged({ ...fieldChanged, [id]: true });
-                const lines = e.currentTarget.innerText.split('\n').map(line => line.trim());
-                const formattedContent = lines.map(line => line ? `<li>${line}</li>` : '').join('');
-                setInputData({
-                  ...inputData,
-                  [id]: formattedContent
-                });
-              }}
-            >
-            <ul>
-              <li></li>
-            </ul>
-          </div>
+      <div className={style ? styles[style] : ''}>
+        <h3>{header}</h3>
+        <input
+          type={type}
+          name={name as string}
+          placeholder={placeholder ? placeholder : ''}
+          className={classname ? styles[classname] : ''}
+          required
+          onChange={(e) => {
+            if (changeHandler) {
+              changeHandler(index as number, e, name);
+            } else {
+              setFieldChanged({ ...fieldChanged, [name]: true });
+              setInputData({ ...inputData, [name]: e.target.value });
+            }
+          }}
+          value={value || ''}
+        />
       </div>
     );
   }
 
+  function createDescriptionField(header: string, 
+    id: string 
+    ) {
+      return (
+      <div className={styles.all_line}>
+              <h3>{header}</h3>
+              <div 
+                id={id} 
+                contentEditable='true'
+                className={styles.editable}
+                onInput={(e) => {
+                  setFieldChanged({ ...fieldChanged, [id]: true });
+                  const lines = e.currentTarget.innerText.split('\n').map(line => line.trim());
+                  const formattedContent = lines.map(line => line ? `<li>${line}</li>` : '').join('');
+                  setInputData({
+                    ...inputData,
+                    [id]: formattedContent
+                  });
+                }}
+              >
+              <ul>
+                <li></li>
+              </ul>
+            </div>
+        </div>
+      );
+    }
+
+    function createEditableContentField<T>(
+      id: string,
+      index: number,
+      stateData: T[],
+      data: string,
+      setState: React.Dispatch<React.SetStateAction<T[]>>,
+    ) {
+      return (
+        <div
+          id={id}
+          contentEditable='true'
+          className={styles.editable}
+          onInput={(e) => {
+            setFieldChanged({ ...fieldChanged, [id]: true });
+            const lines = e.currentTarget.innerText.split('\n').map(line => line.trim());
+            const formattedContent = lines.map(line => line ? `<li>${line}</li>` : '').join('');
+            const updatedData = [...stateData];
+            (updatedData[index] as any)[id] = formattedContent;
+            setState(updatedData);
+            setInputData({
+              ...inputData,
+              [data]: updatedData,
+            });
+          }}
+        >
+          <ul>
+            <li></li>
+          </ul>
+        </div>
+      );
+    }
+    
   return (
     <body className={styles.body}>
       <main className={styles.main}>
         <div className={styles.input}>
           <div className={styles.info}>
-              {createInputField('all_line', 'Name', 'text', 'full_name', 'John Doe', 'one_line')}
-              {createInputField('all_line', 'Objective', 'text', 'objective', 'Software Developer', 'one_line')}
+            {createInputField<InputData>('all_line', 'Name', 'text', 'full_name', 'John Doe', 'one_line', undefined, inputData.full_name, undefined)}
+            {createInputField<InputData>('all_line', 'Objective', 'text', 'objective', 'Software Developer', 'one_line', undefined, inputData.objective, undefined)}
             <div className={styles.inline}>
-              {createInputField('biggest', 'Email', 'email', 'email', 'example@example.org', '')}
-              {createInputField('', 'Phone', 'number', 'phone', 'Phone number...', '')}
+              {createInputField<InputData>('biggest', 'Email', 'email', 'email', 'example@example.org', '', undefined, inputData.email, undefined)}
+              {createInputField<InputData>('', 'Phone', 'number', 'phone', 'Phone number...', '', undefined, inputData.phone, undefined)}
             </div>
             <div className={styles.inline}>
-              {createInputField('biggest', 'Website', 'text', 'website', 'Your website...', '')}
-              {createInputField('', 'Location', 'text', 'location', 'Your location...', '')}
+              {createInputField<InputData>('biggest', 'Website', 'text', 'website', 'Your website...', '', undefined, inputData.website, undefined)}
+              {createInputField<InputData>('', 'Location', 'text', 'location', 'Your location...', '', undefined, inputData.location, undefined)}
             </div>
           </div>
           <div className={styles.info} >
@@ -264,75 +304,15 @@ function createDescriptionField(header: string,
               {workExperience.map((experience, index) => { 
               return (
                 <div key={experience.id}>
-                  <div className={styles.all_line}>
-                    <h3>Company</h3>
-                    <input 
-                    type='text'
-                    name='company'
-                    placeholder='Company name...'
-                    className={styles.one_line}
-                    required
-                    onChange={(e) => handleWorkExperienceChange(index, e, 'company')}
-                    value={experience.company}
-                    />
-                  </div>
+                  {createInputField<WorkExperience>('all_line', 'Company', 'text', 'company', 'Company name...', 'one_line', index, experience.company, handleWorkExperienceChange)}
                   <div className={styles.inline}>
-                    <div className={styles.biggest}>
-                      <h3>Job title</h3>
-                      <input
-                        type='text'
-                        name='job_title'
-                        placeholder='Software Developer'
-                        required
-                        onChange={(e) => handleWorkExperienceChange(index, e, 'job_title')}
-                        value={experience.job_title}
-                      />
-                    </div>
-                    <div>
-                      <h3>Date from</h3>
-                      <input
-                        type='text'
-                        name='date_job_from'
-                        placeholder='Date from...'
-                        required
-                        onChange={(e) => handleWorkExperienceChange(index, e, 'date_job_from')}
-                        value={experience.date_job_from}
-                      />
-                    </div>
-                    <div>
-                      <h3>Date to</h3>
-                      <input
-                      type='text'
-                      name='date_job_to'
-                      placeholder='Date to...'
-                      required
-                      onChange={(e) => handleWorkExperienceChange(index, e, 'date_job_to')}
-                      value={experience.date_job_to}
-                      />
-                    </div>
+                    {createInputField<WorkExperience>('biggest', 'Job title', 'text', 'job_title', 'Software developer', '', index, experience.job_title, handleWorkExperienceChange)}
+                    {createInputField<WorkExperience>('', 'Date from', 'text', 'date_job_from', 'Date from...', '', index, experience.date_job_from, handleWorkExperienceChange)}
+                    {createInputField<WorkExperience>('','Date to', 'text', 'date_job_to','Date to...','',index, experience.date_job_to, handleWorkExperienceChange)}
                   </div>
                   <div className={styles.all_line}>
                     <h3>Description</h3>
-                    <div
-                      id={`job_description_${index}`}
-                      contentEditable='true'
-                      className={styles.editable}
-                      onInput={(e) => {
-                        setFieldChanged({ ...fieldChanged, 'job_description': true });
-                        const lines = e.currentTarget.innerText.split('\n').map(line => line.trim());
-                        const formattedContent = lines.map(line => line ? `<li>${line}</li>` : '').join('');
-                        const updatedWorkExperience = [...workExperience];
-                        updatedWorkExperience[index].job_description = formattedContent;
-                        setWorkExperience(updatedWorkExperience);
-                        setInputData({
-                          ...inputData,
-                          workExperience: updatedWorkExperience
-                        });
-                      }}>
-                      <ul>
-                        <li></li>
-                      </ul>
-                    </div>
+                    {createEditableContentField<WorkExperience>(`job_description`, index, workExperience, 'workExperience', setWorkExperience)}
                   </div>
                   <button type='button' onClick={() => removeWorkExperience(experience.id)}>Remove Work Experience</button>
                 </div>
@@ -347,87 +327,17 @@ function createDescriptionField(header: string,
               {education.map((edu, index) => (
                 <div key={edu.id}>
                   <div className={styles.inline}>
-                      <div className={styles.biggest}>
-                        <h3>School</h3>
-                        <input
-                          type='text'
-                          name='school_name'
-                          placeholder='School name...'
-                          required
-                          onChange={(e) => handleEducationChange(index, e, 'school_name')}
-                          value={edu.school_name}
-                        />
-                      </div>
-                      <div>
-                        <h3>Date from</h3>
-                        <input
-                          type='text'
-                          name='date_school_from'
-                          placeholder='Date from...'
-                          required
-                          onChange={(e) => handleEducationChange(index, e, 'date_school_from')} 
-                          value={edu.date_school_from}
-                        />
-                      </div>
-                      <div>
-                        <h3>Date to</h3>
-                        <input
-                        type='text'
-                        name='date_school_to'
-                        placeholder='Date to...'
-                        required
-                        onChange={(e) => handleEducationChange(index, e, 'date_school_to')}
-                        value={edu.date_school_to}
-                      />
-                    </div>
+                    {createInputField<Education>('biggest', 'School', 'text', 'school_name', 'School name', '', index, edu.school_name, handleEducationChange)}
+                    {createInputField<Education>('','Date from', 'text', 'date_school_from', 'Date from...', '', index, edu.date_school_from, handleEducationChange)}
+                    {createInputField<Education>('','Date to', 'text', 'date_school_to', 'Date to...', '', index, edu.date_school_to, handleEducationChange)}
                   </div>
                   <div className={styles.inline}>
-                    <div className={styles.biggest}>
-                      <h3>Degree</h3>
-                      <input
-                        type='text'
-                        name='degree'
-                        placeholder='High school degree...'
-                        required
-                        onChange={(e) => handleEducationChange(index, e, 'degree')}
-                        value={edu.degree}
-                      />
-                    </div>
-                    <div>
-                      <h3>GPA</h3>
-                      <input 
-                        type='text'
-                        name='gpa'
-                        placeholder='3.81'
-                        required
-                        onChange={(e) => handleEducationChange(index, e, 'gpa')}
-                        value={edu.gpa}
-                      />
-                    </div>
+                    {createInputField<Education>('biggest', 'Degree', 'text', 'degree', 'High school degree...', '', index, edu.degree, handleEducationChange)}
+                    {createInputField<Education>('', 'GPA', 'text', 'gpa', '3.81', '', index, edu.degree, handleEducationChange)}
                   </div>
                   <div className={styles.all_line}>
                       <h3>Description</h3>
-                      <div
-                        id='school_description'
-                        contentEditable='true'
-                        className={styles.editable}
-                        onInput={(e) => {
-                          setFieldChanged({ ...fieldChanged, 'school_description': true });
-                          const lines = e.currentTarget.innerText.split('\n').map(line => line.trim());
-                          const formattedContent = lines.map(line => line ? `<li>${line}</li>` : '').join('');
-                          const updatedEducation = [...education];
-                          updatedEducation[index].school_description = formattedContent;
-                          setEducation(updatedEducation);
-                          setInputData({
-                            ...inputData,
-                            education: updatedEducation
-                          });
-                        }}
-                      >
-                        <ul>
-                          <li></li>
-                        </ul>
-                      </div>
+                      {createEditableContentField<Education>('school_description', index, education, 'education', setEducation)}
                     </div>
                   <button type='button' onClick={() => removeEducation(edu.id)}>Remove Education</button>
                 </div>
@@ -445,28 +355,8 @@ function createDescriptionField(header: string,
               {languages.map((language , index) => (
                 <div key={index}>
                   <div className={styles.inline}>
-                    <div className={styles.biggest}>
-                      <h3>Language</h3>
-                      <input
-                        type='text'
-                        name='language'
-                        placeholder='Language...'
-                        required
-                        onChange={(e) => handleLanguagesChange(index, e, 'language')}
-                        value={language.language}
-                      />
-                    </div>
-                    <div>
-                      <h3>Overall rating</h3>
-                      <input
-                        type='text'
-                        name='rating'
-                        placeholder='B1'
-                        required
-                        onChange={(e) => handleLanguagesChange(index, e, 'rating')}
-                        value={language.rating}
-                      />
-                    </div>
+                    {createInputField<Languages>('biggest', 'Language', 'text', 'language', 'Language...', '', index, language.language, handleLanguagesChange)}
+                    {createInputField<Languages>('', 'Overall rating', 'text', 'rating', 'B1', '', index, language.rating, handleLanguagesChange)}
                   </div>
                   <button type='button' onClick={() => removeLanguage(index)}>Remove Language</button>
                 </div>
@@ -474,7 +364,7 @@ function createDescriptionField(header: string,
             </form>
             <button onClick={addLanguage}>Add Language</button>
           </div>
-          <pre>{JSON.stringify(inputData, null, 2)}</pre>
+          {/* <pre>{JSON.stringify(inputData, null, 2)}</pre> */}
         </div>
         <div className={styles.output} id='output'> 
         <iframe
