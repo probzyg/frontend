@@ -3,6 +3,7 @@
 import styles from './page.module.css'
 import { useState , useRef} from 'react'
 import downloadPDF from './downloadPDF';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function Home() {
 
@@ -11,6 +12,7 @@ const iframeRef = useRef(null);
 const emptyDate = new Date(0);
 
 type WorkExperience = {
+  id: string,
   company: string;
   job_title: string;
   date_job_from: string;
@@ -20,6 +22,7 @@ type WorkExperience = {
 
 const [workExperience, setWorkExperience] = useState<WorkExperience[]>([
   {
+    id: uuidv4(),
     company: '',
   job_title: '',
   date_job_from: '',
@@ -38,6 +41,7 @@ const handleWorkExperienceChange = (index: number, event: React.ChangeEvent<HTML
 
 const addWorkExperience = () => {
   const newField = {
+    id: uuidv4(),
     company: '',
     job_title: '',
     date_job_from: '',
@@ -48,15 +52,14 @@ const addWorkExperience = () => {
   setInputData({ ...inputData, workExperience: [...workExperience, newField] });
 };
 
-const removeWorkExperience = (index: any) => {
-  const updatedWorkExperience = [...workExperience];
-  updatedWorkExperience.splice(index, 1);
-  
+const removeWorkExperience = (id: string) => {
+  const updatedWorkExperience = workExperience.filter((experience) => experience.id !== id);
   setWorkExperience(updatedWorkExperience);
   setInputData({ ...inputData, workExperience: updatedWorkExperience });
 };
 
 type Education= {
+  id: string,
   school_name: string;
   date_school_from: string;
   date_school_to: string;
@@ -67,6 +70,7 @@ type Education= {
 
 const [education, setEducation] = useState<Education[]>([
   {
+    id: uuidv4(),
     school_name: '',
     date_school_from: '',
     date_school_to: '',
@@ -86,6 +90,7 @@ const handleEducationChange = (index: number, event: React.ChangeEvent<HTMLInput
 
 const addEducation = () => {
   const newField = {
+    id: uuidv4(),
     school_name: '',
     date_school_from: '',
     date_school_to: '',
@@ -97,9 +102,8 @@ const addEducation = () => {
   setInputData({ ...inputData, education: [...education, newField] });
 };
 
-const removeEducation = (index: any) => {
-  const updatedEducation = [...education];
-  updatedEducation.splice(index, 1);
+const removeEducation = (id: string) => {
+  const updatedEducation = education.filter((education) => education.id !== id);
   setEducation(updatedEducation);
   setInputData({ ...inputData, education: updatedEducation });
 };
@@ -259,7 +263,7 @@ function createDescriptionField(header: string,
             <form>
               {workExperience.map((experience, index) => { 
               return (
-                <div key={index}>
+                <div key={experience.id}>
                   <div className={styles.all_line}>
                     <h3>Company</h3>
                     <input 
@@ -330,7 +334,7 @@ function createDescriptionField(header: string,
                       </ul>
                     </div>
                   </div>
-                  <button type='button' onClick={() => removeWorkExperience(index)}>Remove Work Experience</button>
+                  <button type='button' onClick={() => removeWorkExperience(experience.id)}>Remove Work Experience</button>
                 </div>
               );
               })}
@@ -341,7 +345,7 @@ function createDescriptionField(header: string,
             <h1>Education</h1>
             <form>
               {education.map((edu, index) => (
-                <div key={index}>
+                <div key={edu.id}>
                   <div className={styles.inline}>
                       <div className={styles.biggest}>
                         <h3>School</h3>
@@ -425,7 +429,7 @@ function createDescriptionField(header: string,
                         </ul>
                       </div>
                     </div>
-                  <button type='button' onClick={() => removeEducation(index)}>Remove Education</button>
+                  <button type='button' onClick={() => removeEducation(edu.id)}>Remove Education</button>
                 </div>
               ))}
             </form>
