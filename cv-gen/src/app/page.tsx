@@ -284,7 +284,7 @@
             </div>
           </div>
           <div className={styles.info} >
-            <h1>Work experience</h1>
+            <h1 className={styles.header}>Work experience</h1>
             <form>
               {workExperience.map((experience, index) => { 
               return (
@@ -296,15 +296,15 @@
                     {createInputField<WorkExperience>('','Date to', 'text', 'date_job_to','Date to...','',index, experience.date_job_to, handleWorkExperienceChange)}
                   </div>
                     {createEditableContentField<WorkExperience>('Description',`job_description`, index, workExperience, 'workExperience', setWorkExperience)}
-                  <button type='button' onClick={() => removeWorkExperience(experience.id)}>Remove Work Experience</button>
+                  <button type='button' className={styles.button} onClick={() => removeWorkExperience(experience.id)}>Remove Work Experience</button>
                 </div>
               );
               })}
             </form>
-            <button onClick={addWorkExperience}>Add Work Experience</button>
+            <button className={styles.button} onClick={addWorkExperience}>Add Work Experience</button>
         </div>
           <div className={styles.info}>
-            <h1>Education</h1>
+            <h1 className={styles.header}>Education</h1>
             <form>
               {education.map((edu, index) => (
                 <div key={edu.id}>
@@ -315,21 +315,21 @@
                   </div>
                   <div className={styles.inline}>
                     {createInputField<Education>('biggest', 'Degree', 'text', 'degree', 'High school degree...', '', index, edu.degree, handleEducationChange)}
-                    {createInputField<Education>('', 'GPA', 'text', 'gpa', '3.81', '', index, edu.degree, handleEducationChange)}
+                    {createInputField<Education>('', 'GPA', 'text', 'gpa', '3.81', '', index, edu.gpa, handleEducationChange)}
                   </div>
                   {createEditableContentField<Education>('Description', 'school_description', index, education, 'education', setEducation)}
-                  <button type='button' onClick={() => removeEducation(edu.id)}>Remove Education</button>
+                  <button type='button' className={styles.button} onClick={() => removeEducation(edu.id)}>Remove Education</button>
                 </div>
               ))}
             </form>
-            <button onClick={addEducation}>Add Education</button>
+            <button className={styles.button} onClick={addEducation}>Add Education</button>
           </div>
           <div className={styles.info}>
-            <h1>Skills</h1>
+            <h1 className={styles.header}>Skills</h1>
             {createEditableContentField('Skills list', 'skills_list', undefined, inputData, undefined, undefined)}
           </div>
           <div className={styles.info}>
-            <h1>Languages</h1>
+            <h1 className={styles.header}>Languages</h1>
             <form>
               {languages.map((language , index) => (
                 <div key={index}>
@@ -337,11 +337,11 @@
                     {createInputField<Languages>('biggest', 'Language', 'text', 'language', 'Language...', '', index, language.language, handleLanguagesChange)}
                     {createInputField<Languages>('', 'Overall rating', 'text', 'rating', 'B1', '', index, language.rating, handleLanguagesChange)}
                   </div>
-                  <button type='button' onClick={() => removeLanguage(index)}>Remove Language</button>
+                  <button type='button' className={styles.button} onClick={() => removeLanguage(index)}>Remove Language</button>
                 </div>
               ))}
             </form>
-            <button onClick={addLanguage}>Add Language</button>
+            <button className={styles.button} onClick={addLanguage}>Add Language</button>
           </div>
         </div>
         <div className={styles.output} id='output'> 
@@ -445,7 +445,7 @@
             </html>`}
             style={{ width: '100%', height: '100%' }}
           />
-          <button onClick={() => downloadPDF(iframeRef)}>Download PDF</button>
+          <button className={styles.button} onClick={() => downloadPDF(iframeRef)}>Download PDF</button>
         </div>
       </main>
     </body>
