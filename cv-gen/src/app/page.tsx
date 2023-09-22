@@ -22,11 +22,11 @@
     {
       id: uuidv4(),
       company: '',
-    job_title: '',
-    date_job_from: '',
-    date_job_to: '',
-    job_description: ''
-  }
+      job_title: '',
+      date_job_from: '',
+      date_job_to: '',
+      job_description: ''
+    }
   ]);
 
   const handleWorkExperienceChange = (index: number, event: React.ChangeEvent<HTMLInputElement>, name: string) => {
@@ -113,8 +113,10 @@
 
 
   const [languages, setLanguages] = useState<Languages[]>([
-    {language: '',
-      rating: ''}
+    {
+      language: '',
+      rating: ''
+    }
   ]);
 
   const handleLanguagesChange = (index: number, event: React.ChangeEvent<HTMLInputElement>, name: string) => {
@@ -222,62 +224,45 @@
     );
   }
 
-  function createDescriptionField(header: string, 
-    id: string 
-    ) {
-      return (
-      <div className={styles.all_line}>
-              <h3>{header}</h3>
-              <div 
-                id={id} 
-                contentEditable='true'
-                className={styles.editable}
-                onInput={(e) => {
-                  setFieldChanged({ ...fieldChanged, [id]: true });
-                  const lines = e.currentTarget.innerText.split('\n').map(line => line.trim());
-                  const formattedContent = lines.map(line => line ? `<li>${line}</li>` : '').join('');
-                  setInputData({
-                    ...inputData,
-                    [id]: formattedContent
-                  });
-                }}
-              >
-              <ul>
-                <li></li>
-              </ul>
-            </div>
-        </div>
-      );
-    }
-
     function createEditableContentField<T>(
+      header: string,
       id: string,
-      index: number,
-      stateData: T[],
-      data: string,
-      setState: React.Dispatch<React.SetStateAction<T[]>>,
+      index: number | undefined,
+      stateData: T | T[],
+      data: string | undefined,
+      setState: undefined | React.Dispatch<React.SetStateAction<T[]>>,
     ) {
       return (
-        <div
-          id={id}
-          contentEditable='true'
-          className={styles.editable}
-          onInput={(e) => {
-            setFieldChanged({ ...fieldChanged, [id]: true });
-            const lines = e.currentTarget.innerText.split('\n').map(line => line.trim());
-            const formattedContent = lines.map(line => line ? `<li>${line}</li>` : '').join('');
-            const updatedData = [...stateData];
-            (updatedData[index] as any)[id] = formattedContent;
-            setState(updatedData);
-            setInputData({
-              ...inputData,
-              [data]: updatedData,
-            });
-          }}
-        >
-          <ul>
-            <li></li>
-          </ul>
+        <div className={styles.all_line}>
+          <h3>{header}</h3>
+          <div
+            id={id}
+            contentEditable='true'
+            className={styles.editable}
+            onInput={(e) => {
+              setFieldChanged({ ...fieldChanged, [id]: true });
+              const lines = e.currentTarget.innerText.split('\n').map(line => line.trim());
+              const formattedContent = lines.map(line => line ? `<li>${line}</li>` : '').join('');
+              if (index !== undefined && data !== undefined && Array.isArray(stateData) && setState !== undefined) {
+                const updatedData = [...stateData];
+                (updatedData[index] as any)[id] = formattedContent;
+                setState(updatedData);
+                setInputData({
+                  ...inputData,
+                  [data]: updatedData,
+                });
+              } else {
+                setInputData({
+                  ...inputData,
+                  [id]: formattedContent,
+                });
+              }
+            }}
+          >
+            <ul>
+              <li></li>
+            </ul>
+          </div>
         </div>
       );
     }
@@ -310,10 +295,7 @@
                     {createInputField<WorkExperience>('', 'Date from', 'text', 'date_job_from', 'Date from...', '', index, experience.date_job_from, handleWorkExperienceChange)}
                     {createInputField<WorkExperience>('','Date to', 'text', 'date_job_to','Date to...','',index, experience.date_job_to, handleWorkExperienceChange)}
                   </div>
-                  <div className={styles.all_line}>
-                    <h3>Description</h3>
-                    {createEditableContentField<WorkExperience>(`job_description`, index, workExperience, 'workExperience', setWorkExperience)}
-                  </div>
+                    {createEditableContentField<WorkExperience>('Description',`job_description`, index, workExperience, 'workExperience', setWorkExperience)}
                   <button type='button' onClick={() => removeWorkExperience(experience.id)}>Remove Work Experience</button>
                 </div>
               );
@@ -335,10 +317,7 @@
                     {createInputField<Education>('biggest', 'Degree', 'text', 'degree', 'High school degree...', '', index, edu.degree, handleEducationChange)}
                     {createInputField<Education>('', 'GPA', 'text', 'gpa', '3.81', '', index, edu.degree, handleEducationChange)}
                   </div>
-                  <div className={styles.all_line}>
-                      <h3>Description</h3>
-                      {createEditableContentField<Education>('school_description', index, education, 'education', setEducation)}
-                    </div>
+                  {createEditableContentField<Education>('Description', 'school_description', index, education, 'education', setEducation)}
                   <button type='button' onClick={() => removeEducation(edu.id)}>Remove Education</button>
                 </div>
               ))}
@@ -347,7 +326,7 @@
           </div>
           <div className={styles.info}>
             <h1>Skills</h1>
-            {createDescriptionField('Skills list', 'skills_list')}
+            {createEditableContentField('Skills list', 'skills_list', undefined, inputData, undefined, undefined)}
           </div>
           <div className={styles.info}>
             <h1>Languages</h1>
@@ -364,12 +343,12 @@
             </form>
             <button onClick={addLanguage}>Add Language</button>
           </div>
-          {/* <pre>{JSON.stringify(inputData, null, 2)}</pre> */}
         </div>
         <div className={styles.output} id='output'> 
         <iframe
             ref={iframeRef}
-            srcDoc={`<!DOCTYPE html>
+            srcDoc={`
+            <!DOCTYPE html>
             <html>
               <head>
               <style>
