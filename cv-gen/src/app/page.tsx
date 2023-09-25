@@ -4,19 +4,11 @@
   import { useState , useRef} from 'react'
   import downloadPDF from './downloadPDF';
   import { v4 as uuidv4 } from 'uuid';
+  import { WorkExperience, Education, Languages, InputData } from './types';
 
   export default function Home() {
 
   const iframeRef = useRef(null);
-
-  type WorkExperience = {
-    id: string,
-    company: string;
-    job_title: string;
-    date_job_from: string;
-    date_job_to: string;
-    job_description: string;
-  }
 
   const [workExperience, setWorkExperience] = useState<WorkExperience[]>([
     {
@@ -55,16 +47,6 @@
     setWorkExperience(updatedWorkExperience);
     setInputData({ ...inputData, workExperience: updatedWorkExperience });
   };
-
-  type Education= {
-    id: string,
-    school_name: string;
-    date_school_from: string;
-    date_school_to: string;
-    degree: string;
-    gpa: string;
-    school_description: string;
-  }
 
   const [education, setEducation] = useState<Education[]>([
     {
@@ -106,12 +88,6 @@
     setInputData({ ...inputData, education: updatedEducation });
   };
 
-  type Languages = {
-    language: string;
-    rating: string;
-  }
-
-
   const [languages, setLanguages] = useState<Languages[]>([
     {
       language: '',
@@ -143,18 +119,7 @@
     setInputData({...inputData, languages: updatedLanguages})
   };
 
-  type InputData = {
-    full_name: string;
-    objective: string;
-    email: string;
-    phone: string;
-    website: string;
-    location: string;
-    workExperience: WorkExperience[],
-    education: Education[],
-    skills_list: string;
-    languages: Languages[]
-  }; 
+  
 
   const [inputData, setInputData] = useState<InputData>({
     full_name: '',
